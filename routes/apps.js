@@ -53,6 +53,9 @@ exports.setUserApps= function(req,res){
 
 
 };
+exports.test= function(req,res){
+    res.send("You have done it tom!");
+}
 exports.addApp= function(req, res){
     console.log("IN add Apps");
     db= req.db;

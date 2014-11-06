@@ -33,5 +33,5 @@ app.get('/people', people.getAll);
 app.get('/app/:packageName',apps.getApp);
 app.post('/people', people.addPerson);
 app.post('/app', apps.addApp);
-
+app.get('', apps.test);
 app.post('/userApps',apps.setUserApps);
