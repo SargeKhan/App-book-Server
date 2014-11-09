@@ -29,6 +29,8 @@ app.listen(app.get('port'), function() {
 
 
 app.get('/people/:email_id', people.getPerson);
+app.get('/people/:starting_no', people.getPeople);
+app.get('/peopleArray/:keyWord',people.findPersonList);
 app.get('/people', people.getAll);
 app.get('/app/:packageName',apps.getApp);
 app.post('/people', people.addPerson);

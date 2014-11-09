@@ -41,7 +41,7 @@ exports.addPerson = function(request,response){
                 }
             });
         }else{
-            response.send("okay");
+            response.send("User already exists");
         }
     });
 };
@@ -62,6 +62,94 @@ exports.getPerson = function(req, res){
     })
 
 }
+exports.findPersonList= function(req, res){
+
+    person= req.params;
+    console.log(JSON.stringify(person));
+    people= req.db.get("people");
+    Data=[];
+    people.find({"email_id":person.keyWord},function(error,data){
+        if(error)
+            console.log(error);
+        else{
+            if(data.length!= 0){
+
+                Data=  data;
+                console.log(JSON.stringify(Data));
+            }
+        }
+
+        people.find({"name":person.keyWord},function(error,data){
+            if(error)
+                console.log(error);
+            else{
+                if(data.length!= 0){
+                    Data= Data.concat(data);
+                    console.log(JSON.stringify(Data));
+                }
+                res.send(Data);
+            }
+
+        });
+    });
+   /* people.find({"email_id":nameOrUsername.keyWord},function(error,data){
+        if(error)
+            console.log(error);
+        else{
+            if(data.length!= 0) {
+                returnedData = returnedData + data;
+                res.send(returnedData)
+            }
+
+        }*/
+     /*   people.find({"name":nameOrUsername.keyWord},function(error,data){
+            if(error)
+                console.log(error);
+            else{
+                if(data.length!= 0)
+                    returnedData= returnedData+data;
+
+            }
+            count=1;
+            res.send(returnedData);
+        });*/
+
+
+ //       count1=1;
+  //  });
+   // res.send(returnedData);
+    /*people= req.db.get("people");
+     people.find({"email_id":person.email_id},function(error,data){
+     if(error)
+     console.log(error);
+     else{
+     if(data.length!= 0)
+     res.send(data[0]);
+     else
+     res.send("Person Not found");
+     }
+     })
+     */
+};
+exports.getPeople= function(req, res){
+    person= req.params;
+    console.log(JSON.stringify(person));
+    res.send("In get People");
+    /*people= req.db.get("people");
+     people.find({"email_id":person.email_id},function(error,data){
+     if(error)
+     console.log(error);
+     else{
+     if(data.length!= 0)
+     res.send(data[0]);
+     else
+     res.send("Person Not found");
+     }
+     })
+     */
+}
+
+
 
 function addApps(appList, db){
     appsDocument= db.get("apps");
