@@ -15,8 +15,6 @@ exports.getAll =function(request, response) {
             response.send({"data":data});
         }
     });
-
-
 };
 exports.addPerson = function(request,response){
 
@@ -67,8 +65,9 @@ exports.findPersonList= function(req, res){
     person= req.params;
     console.log(JSON.stringify(person));
     people= req.db.get("people");
+    var re = new RegExp(person.keyWord, 'i');
     Data=[];
-    people.find({"email_id":person.keyWord},function(error,data){
+    people.find({$or : [{"email_id":{ $regex: re }},{"name":{ $regex: re }}]},function(error,data){
         if(error)
             console.log(error);
         else{
@@ -76,21 +75,9 @@ exports.findPersonList= function(req, res){
 
                 Data=  data;
                 console.log(JSON.stringify(Data));
+                res.send(data);
             }
         }
-
-        people.find({"name":person.keyWord},function(error,data){
-            if(error)
-                console.log(error);
-            else{
-                if(data.length!= 0){
-                    Data= Data.concat(data);
-                    console.log(JSON.stringify(Data));
-                }
-                res.send(Data);
-            }
-
-        });
     });
    /* people.find({"email_id":nameOrUsername.keyWord},function(error,data){
         if(error)
@@ -130,7 +117,7 @@ exports.findPersonList= function(req, res){
      }
      })
      */
-};
+};;
 exports.getPeople= function(req, res){
     person= req.params;
     console.log(JSON.stringify(person));
