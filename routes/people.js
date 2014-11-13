@@ -16,10 +16,8 @@ exports.getAll =function(request, response) {
         }
     });
 };
+
 exports.addPerson = function(request,response){
-
-
-
     console.log("Add Person data:" + JSON.stringify(request.body));
     db= request.db;
 
@@ -75,49 +73,26 @@ exports.findPersonList= function(req, res){
 
                 Data=  data;
                 console.log(JSON.stringify(Data));
-                res.send(data);
             }
+            res.send(data);
         }
     });
-   /* people.find({"email_id":nameOrUsername.keyWord},function(error,data){
-        if(error)
+};
+
+exports.getFriends= function(req,res){
+    friends= req.params.ids.split(",");
+
+    db= req.db;
+    console.log(JSON.stringify(friends));
+
+    people= db.get("people");
+    people.find({"email_id": { $in: friends}},function(error,data){
+        if(!error)
+            res.send({"data":data});
+        else
             console.log(error);
-        else{
-            if(data.length!= 0) {
-                returnedData = returnedData + data;
-                res.send(returnedData)
-            }
-
-        }*/
-     /*   people.find({"name":nameOrUsername.keyWord},function(error,data){
-            if(error)
-                console.log(error);
-            else{
-                if(data.length!= 0)
-                    returnedData= returnedData+data;
-
-            }
-            count=1;
-            res.send(returnedData);
-        });*/
-
-
- //       count1=1;
-  //  });
-   // res.send(returnedData);
-    /*people= req.db.get("people");
-     people.find({"email_id":person.email_id},function(error,data){
-     if(error)
-     console.log(error);
-     else{
-     if(data.length!= 0)
-     res.send(data[0]);
-     else
-     res.send("Person Not found");
-     }
-     })
-     */
-};;
+    });
+};
 exports.getPeople= function(req, res){
     person= req.params;
     console.log(JSON.stringify(person));
