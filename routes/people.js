@@ -25,20 +25,18 @@ exports.addPerson = function(request,response){
     people.find({"email_id" :request.body.email_id},function(error,data){
         if(error)
             console.log("Error finding person");
-        if(data.length==0)
-        {
-            people.insert(request.body, function(error,data){
-                if(error) {
+        if(data.length==0) {
+            people.insert(request.body, function (error, data) {
+                if (error) {
                     console.log("Could not add" + error);
                 }
-                else{
+                else {
                     response.send("okay");
                     console.log("Entry Created" + data);
                 }
             });
-        }else{
-            response.send("User already exists");
-        }
+        }else
+            response.send("okay");
     });
 };
 
@@ -58,25 +56,33 @@ exports.getPerson = function(req, res){
     })
 
 }
-exports.findPersonList= function(req, res){
+exports.findPersonList= function(req, res) {
 
-    person= req.params;
-    console.log(JSON.stringify(person));
-    people= req.db.get("people");
-    var re = new RegExp(person.keyWord, 'i');
-    Data=[];
-    people.find({$or : [{"email_id":{ $regex: re }},{"name":{ $regex: re }}]},function(error,data){
-        if(error)
-            console.log(error);
-        else{
-            if(data.length!= 0){
+    query = req.params.keyWord.split("$");
+    queryType = query[0];
+    queryVal = query[1];
+    console.log(query);
+    people = req.db.get("people");
+    if (queryType == "Find") {
+        person = req.params;
+        console.log(JSON.stringify(person));
 
-                Data=  data;
-                console.log(JSON.stringify(Data));
+        var re = new RegExp(queryVal, 'i');
+        people.find({"name": { $regex: re }}, function (error, data) {
+            if (error)
+                console.log(error);
+            else {
+                res.send(data);
             }
-            res.send(data);
-        }
-    });
+        });
+    }else{
+        if(queryType== "Next"){
+            people.find({},{'skip': queryVal, 'limit':10},function(error,data){
+                res.send(data);
+            });
+        }else
+            res.send([]);
+    }
 };
 
 exports.getFriends= function(req,res){
