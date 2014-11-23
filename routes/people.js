@@ -17,6 +17,31 @@ exports.getAll =function(request, response) {
     });
 };
 
+exports.changeBio= function(request,response){
+    console.log("Add Person data:" + JSON.stringify(request.body));
+    db= request.db;
+
+    people= db.get("people");
+    people.find({"email_id" :request.body.email_id},function(error,data){
+        if(error)
+            console.log("Error finding person");
+        if(data.length==0) {
+            response.send("Success!")
+        }else{
+            data[0].bio=request.body.bio;
+            people.update({"email_id":request.body.email_id},{$set : {"bio":request.body.bio}}, function(err, data) {
+                if (err) {
+                    console.log("Could not add" + error);
+                }
+                else {
+                    response.send("Success");
+                    console.log("Entry Created" + data);
+                }
+            });
+        }
+    });
+};
+
 exports.addPerson = function(request,response){
     console.log("Add Person data:" + JSON.stringify(request.body));
     db= request.db;

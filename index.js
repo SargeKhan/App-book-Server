@@ -33,6 +33,7 @@ app.get('/peopleArray/:keyWord',people.findPersonList);
 app.get('/people', people.getAll);
 app.get('/app/:packageName',apps.getApp);
 app.post('/people', people.addPerson);
+app.put('/peoplebio',people.changeBio);
 app.post('/app', apps.addApp);
 app.get('', apps.test);
 app.post('/userApps',apps.setUserApps);
