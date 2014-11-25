@@ -80,39 +80,31 @@ exports.getPerson = function(req, res){
         }
     })
 
-}
-exports.findPersonList= function(req, res) {
-
-    query = req.params.keyWord.split("$");
-    queryType = query[0];
-    queryVal = query[1];
-    console.log(query);
+};
+exports.nextPersonList= function(req,res){
+    nextItr= req.params;
+    console.log(JSON.stringify(nextItr));
     people = req.db.get("people");
-    if (queryType == "Find") {
-        person = req.params;
-        
-        console.log("FpFind"+queryVal);
-        var obj= JSON.parse(queryVal);
-        console.log(obj.name);
-        
-        var re = new RegExp(obj.name, 'i');
-        console.log(re);
-        people.find({"name": { $regex: re }}, function (error, data) {
-            if (error)
-                console.log(error);
-            else {
-                console.log(JSON.stringify(data));
-                res.send(data);
-            }
-        });
-    }else{
-        if(queryType== "Next"){
-            people.find({},{'skip': queryVal, 'limit':10},function(error,data){
-                res.send(data);
-            });
-        }else
-            res.send([]);
-    }
+    people.find({},{'skip': nextItr.value, 'limit':10},function(error,data){
+        res.send(data);
+    });
+};
+exports.findPersonList= function(req, res) {
+    //console.log(query);
+    people = req.db.get("people");
+    person = req.params;
+
+    console.log("FpFind"+JSON.stringify(person));
+    var re = new RegExp(person.name, 'i');
+    console.log(re);
+    people.find({"name": { $regex: re }}, function (error, data) {
+        if (error)
+            console.log(error);
+        else {
+            console.log(JSON.stringify(data));
+            res.send(data);
+        }
+    });
 };
 
 exports.getFriends= function(req,res){
