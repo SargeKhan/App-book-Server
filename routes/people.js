@@ -90,13 +90,18 @@ exports.findPersonList= function(req, res) {
     people = req.db.get("people");
     if (queryType == "Find") {
         person = req.params;
-        console.log(JSON.stringify(person));
-
-        var re = new RegExp(queryVal, 'i');
+        
+        console.log("FpFind"+queryVal);
+        var obj= JSON.parse(queryVal);
+        console.log(obj.name);
+        
+        var re = new RegExp(obj.name, 'i');
+        console.log(re);
         people.find({"name": { $regex: re }}, function (error, data) {
             if (error)
                 console.log(error);
             else {
+                console.log(JSON.stringify(data));
                 res.send(data);
             }
         });
